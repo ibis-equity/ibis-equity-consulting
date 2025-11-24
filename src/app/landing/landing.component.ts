@@ -9,7 +9,7 @@ import { Component, EventEmitter, HostListener, OnDestroy, OnInit, Output } from
           <h1>Ibis Equity Consulting, LLC.</h1>
           <h2>Artificial Intelligence Engineering</h2>
         </header>
-        <img class="landing-gif" [class.entered]="entered" src="/assets/ibis-pan.gif" alt="Landing animation" />
+        <img class="landing-gif" [class.entered]="entered" src="/assets/ibis-equity-gif.gif" alt="Landing animation" />
 
         <section class="capabilities-wrap" aria-label="Capabilities">
           <div class="capabilities-title">Pythonic AI</div>
