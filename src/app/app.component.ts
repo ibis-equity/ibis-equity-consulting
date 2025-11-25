@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 const LANDING_KEY = 'landing:hide';
 
@@ -26,8 +26,9 @@ const LANDING_KEY = 'landing:hide';
   `,
   styles: [`.spacer { flex: 1 1 auto; }`]
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   showLanding = true;
+  private landingTimerId: number | undefined;
 
   constructor() {
     try {
@@ -36,9 +37,29 @@ export class AppComponent {
     } catch {}
   }
 
+  ngOnInit(): void {
+    if (this.showLanding) {
+      // auto-hide landing after 30 seconds (30000 ms)
+      this.clearLandingTimer();
+      this.landingTimerId = window.setTimeout(() => this.onLandingClosed(), 30000);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.clearLandingTimer();
+  }
+
   onLandingClosed() {
     this.showLanding = false;
+    this.clearLandingTimer();
   }
 
   toggle() { /* placeholder for sidenav on larger UI */ }
+
+  private clearLandingTimer() {
+    if (this.landingTimerId !== undefined) {
+      clearTimeout(this.landingTimerId);
+      this.landingTimerId = undefined;
+    }
+  }
 }

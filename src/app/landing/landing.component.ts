@@ -6,26 +6,17 @@ import { Component, EventEmitter, HostListener, OnDestroy, OnInit, Output } from
     <div class="landing" role="dialog" aria-label="Landing animation" tabindex="0">
       <div class="content" (click)="onClickContent($event)">
         <header class="landing-header" [class.entered]="entered">
-          <h1>Ibis Equity Consulting, LLC.</h1>
-          <h2>Artificial Intelligence Engineering</h2>
+          <h1>Ibis Equity</h1>
+          <h2>Consulting LLC</h2>
+          <h2>Equity at the Core, Innovation at Scale</h2>
         </header>
-        <img class="landing-gif" [class.entered]="entered" src="/assets/ibis-equity-gif.gif" alt="Landing animation" />
+        <img class="landing-gif" [class.entered]="entered" src="/assets/ibis-equity.gif" alt="Landing animation" />
 
+        <!-- capabilities replaced with single paragraph -->
         <section class="capabilities-wrap" aria-label="Capabilities">
-          <div class="capabilities-title">Pythonic AI</div>
-          <div class="capabilities" role="list">
-            <span class="cap" role="listitem" [class.entered]="entered">Machine Learning (ML) & Deep Learning</span>
-            <span class="sep" aria-hidden="true"><svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2 L8 6 L2 10" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
-            <span class="cap" role="listitem" [class.entered]="entered">Cloud Architecture</span>
-            <span class="sep" aria-hidden="true"><svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2 L8 6 L2 10" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
-            <span class="cap" role="listitem" [class.entered]="entered">Generative AI</span>
-            <span class="sep" aria-hidden="true"><svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2 L8 6 L2 10" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
-            <span class="cap" role="listitem" [class.entered]="entered">Prompt Engineering</span>
-            <span class="sep" aria-hidden="true"><svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2 L8 6 L2 10" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
-            <span class="cap" role="listitem" [class.entered]="entered">AI Agents & Orchestration Frameworks</span>
-            <span class="sep" aria-hidden="true"><svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2 L8 6 L2 10" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
-            <span class="cap" role="listitem" [class.entered]="entered">AI-Powered Analytics & BI</span>
-          </div>
+          <p class="capabilities-paragraph">
+            We build modular, equity-driven AI frameworks and cloud-native infrastructures that harmonize human values with technological advancement.
+          </p>
         </section>
 
         <!-- Visually hidden ARIA live region to announce landing content for screen readers -->
@@ -101,21 +92,16 @@ import { Component, EventEmitter, HostListener, OnDestroy, OnInit, Output } from
     .landing-gif { max-height: 50vh; max-width: 100%; margin-left:auto; margin-right:auto }
   }
 
-  /* Capabilities list under GIF */
+  /* Replace capabilities list styling with paragraph styling */
   .capabilities-wrap { text-align: center; margin-top: 14px; color: #fff }
-  .capabilities-title { font-weight: 600; margin-bottom: 6px }
-  .capabilities { display: inline-flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center }
-  .cap { padding: 4px 6px; font-size: 0.95rem; color: rgba(255,255,255,0.95); display:inline-block; opacity: 0; transform: translateY(4px) }
-  /* Subtle vertical line separators instead of dots */
-  .sep { display:inline-block; width:1px; height:18px; background: rgba(255,255,255,0.16); margin: 0 8px; vertical-align:middle }
-
-  /* Staggered fade-in for capabilities */
-  .capabilities .cap:nth-child(1) { transition: opacity 420ms ease-out 420ms, transform 420ms ease-out 420ms }
-  .capabilities .cap:nth-child(3) { transition: opacity 420ms ease-out 520ms, transform 420ms ease-out 520ms }
-  .capabilities .cap:nth-child(5) { transition: opacity 420ms ease-out 620ms, transform 420ms ease-out 620ms }
-  .capabilities .cap:nth-child(7) { transition: opacity 420ms ease-out 720ms, transform 420ms ease-out 720ms }
-  .capabilities .cap:nth-child(9) { transition: opacity 420ms ease-out 820ms, transform 420ms ease-out 820ms }
-  .capabilities .cap.entered { opacity: 1; transform: translateY(0) }
+  .capabilities-paragraph {
+    max-width: 900px;
+    margin: 12px auto 0;
+    color: rgba(255,255,255,0.95);
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: center;
+  }
 
   /* Accessibility: respect prefers-reduced-motion */
   @media (prefers-reduced-motion: reduce) {
