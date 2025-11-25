@@ -11,9 +11,17 @@ import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LandingComponent } from './landing/landing.component';
 import { IconComponent } from './shared/icon/icon.component';
+import { MainPageComponent } from './main-page/main-page.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, DashboardComponent, LandingComponent, IconComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    DashboardComponent,
+    LandingComponent,
+    IconComponent,
+    MainPageComponent
+  ],
   imports: [
     BrowserModule,
     CommonModule,
@@ -21,7 +29,8 @@ import { IconComponent } from './shared/icon/icon.component';
     MaterialModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent },
+      { path: '', component: MainPageComponent },
+      { path: 'home', component: HomeComponent },
       { path: 'dashboard', component: DashboardComponent }
     ])
   ],

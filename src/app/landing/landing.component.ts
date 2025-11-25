@@ -1,16 +1,17 @@
-import { Component, EventEmitter, HostListener, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
   template: `
     <div class="landing" role="dialog" aria-label="Landing animation" tabindex="0">
       <div class="content" (click)="onClickContent($event)">
-        <header class="landing-header" [class.entered]="entered">
-          <h1>Ibis Equity</h1>
-          <h2>Consulting LLC</h2>
-          <h2>Equity at the Core, Innovation at Scale</h2>
+        <header class="landing-header" [class.entered]="entered" aria-labelledby="landing-title">
+          <h1 id="landing-title" class="brand-dynamic">Ibis Equity</h1>
+          <h2 class="landing-sub">Consulting LLC</h2>
+          <h3 class="landing-tag">Equity at the Core, Innovation at Scale</h3>
         </header>
-        <img class="landing-gif" [class.entered]="entered" src="/assets/ibis-equity.gif" alt="Landing animation" />
+        <img class="landing-gif" [class.entered]="entered" src="/assets/ibis-equity-gif.gif" alt="Landing animation" />
 
         <!-- capabilities replaced with single paragraph -->
         <section class="capabilities-wrap" aria-label="Capabilities">
@@ -42,9 +43,49 @@ import { Component, EventEmitter, HostListener, OnDestroy, OnInit, Output } from
       cursor: pointer;
     }
   .landing img { max-width: 90%; height: auto; border-radius: 8px; }
-  .landing-header { text-align: center; color: #fff; margin-bottom: 12px }
-  .landing-header h1 { margin: 0; font-size: 1.6rem }
-  .landing-header h2 { margin: 0; font-size: 1.1rem; opacity: 0.9 }
+  .landing-header { text-align: center; color: #fff; margin-bottom: 12px; line-height: 1; }
+
+  /* Dynamic large brand */
+  .brand-dynamic {
+    margin: 0;
+    font-size: 3.2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    display: inline-block;
+    background: linear-gradient(90deg, #9be15d 0%, #00c6ff 50%, #7b61ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transform-origin: center;
+    animation: brandFloat 880ms cubic-bezier(.22,.9,.32,1) both;
+    transition: transform 260ms ease, filter 260ms ease;
+  }
+
+  .brand-dynamic:hover {
+    transform: scale(1.04) rotate(-0.6deg);
+    filter: drop-shadow(0 6px 18px rgba(0,0,0,0.45));
+  }
+
+  @keyframes brandFloat {
+    0%   { opacity: 0; transform: translateY(-8px) scale(0.98) }
+    65%  { transform: translateY(0) scale(1.06); opacity: 1 }
+    100% { transform: translateY(0) scale(1) }
+  }
+
+  .landing-sub { margin: 6px 0 0; font-size: 1.05rem; opacity: 0.95 }
+  .landing-tag { margin: 4px 0 0; font-size: 0.95rem; opacity: 0.85 }
+
+  /* Responsive brand sizes */
+  @media (max-width: 1100px) {
+    .brand-dynamic { font-size: 2.8rem }
+  }
+  @media (max-width: 800px) {
+    .brand-dynamic { font-size: 2.4rem }
+  }
+  @media (max-width: 480px) {
+    .brand-dynamic { font-size: 1.9rem }
+  }
+
   /* Constrain GIF so it never overflows the viewport height and stays centered.
      Make the content area scrollable so the header remains visible on small viewports/fullscreen. */
   .landing-gif {
@@ -118,26 +159,54 @@ import { Component, EventEmitter, HostListener, OnDestroy, OnInit, Output } from
 })
 export class LandingComponent implements OnInit, OnDestroy {
   @Output() closed = new EventEmitter<void>();
-  private timeoutId: any;
+
+  private timeoutId?: any;
+
   dontShowAgain = false;
   entered = false;
+
+  constructor(
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     // Trigger entrance animations shortly after init
     setTimeout(() => this.entered = true, 50);
-    // Hide after 30 seconds
-    this.timeoutId = setTimeout(() => this.close(), 30000);
+    // ensure auto-close timer still present (20s)
+    this.clearTimer();
+    this.timeoutId = setTimeout(() => this.close(), 20000);
   }
 
   ngOnDestroy(): void {
-    if (this.timeoutId) clearTimeout(this.timeoutId);
+    this.clearTimer();
   }
 
-  close() {
-    if (this.dontShowAgain) {
-      try { localStorage.setItem('landing:hide', '1'); } catch {}
-    }
+  close(): void {
+    try {
+      if (this.dontShowAgain) {
+        localStorage.setItem('landing:hide', '1');
+      }
+    } catch {}
+
+    this.clearTimer?.();
+    this.entered = false;
+
+    // notify parent and navigate to root (MainPageComponent)
     this.closed.emit();
+    this.router.navigate(['/']).catch(() => {/* ignore navigation errors */});
+  }
+
+  private clearTimer() {
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = undefined;
+    }
+  }
+
+  // helper to hide without navigating (if used elsewhere)
+  private hideLocal() {
+    // ...existing logic that hides the landing in-place...
+    // e.g. emit event or set a local visible flag
   }
 
   onClickContent(e: Event) {
