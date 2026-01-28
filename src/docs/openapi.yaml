@@ -1,0 +1,83 @@
+openapi: 3.0.3
+info:
+  title: Billing Transactions API
+  version: 1.0.0
+  description: |
+    Example API surface for the AWS + Oracle + Python OLTP billing sample.
+    This specification documents the service contract for read-only access
+    to billing transactions. Implementation is not included in this sample.
+servers:
+  - url: http://localhost:8000
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+  /transactions/{transactionId}:
+    get:
+      summary: Get a billing transaction summary
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique billing transaction id
+      responses:
+        "200":
+          description: Transaction summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BillingTransactionSummary"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    BillingTransactionSummary:
+      type: object
+      properties:
+        transaction_id:
+          type: integer
+          example: 9000001
+        account_id:
+          type: integer
+          example: 2001
+        amount:
+          type: number
+          format: double
+          example: 125.5
+        currency:
+          type: string
+          example: USD
+        status:
+          type: string
+          example: CAPTURED
+      required:
+        - transaction_id
+        - account_id
+        - amount
+        - currency
+        - status
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Transaction not found
+      required:
+        - message

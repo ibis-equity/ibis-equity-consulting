@@ -1,0 +1,23 @@
+services:
+  oracle:
+    image: gvenzl/oracle-free:23-slim
+    environment:
+      ORACLE_PASSWORD: oracle
+      APP_USER: app_user
+      APP_USER_PASSWORD: app_password
+    ports:
+      - "1521:1521"
+    volumes:
+      - ../db/init:/container-entrypoint-initdb.d
+
+  test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      USE_AWS_SECRETS: "false"
+      DB_USER: app_user
+      DB_PASSWORD: app_password
+      DB_DSN: oracle:1521/FREEPDB1
+    depends_on:
+      - oracle
